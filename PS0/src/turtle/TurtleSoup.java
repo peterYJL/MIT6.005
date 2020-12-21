@@ -160,27 +160,10 @@ public class TurtleSoup {
      * @param args unused
      */
     public static void main(String args[]) {
-        DrawableTurtle turtle = new DrawableTurtle();
-        // System.out.println(Math.toDegrees(Math.atan2(0,-1)));
-        // System.out.println(calculateHeadingToPoint(675, 0, 1, -1, 1));
-        drawSquare(turtle, 40);
-        // drawRegularPolygon(turtle, 7, 40);
-        // calculateHeadingToPoint(30, 0, 1, 0, 0);
+        DrawableTurtle turtle = new DrawableTurtle(); 
+        drawSquare(turtle, 40); 
         // draw the window
         turtle.draw();
-
-        /*
-         * List<Integer> xCoords = new ArrayList<Integer>(); xCoords.add(0);
-         * xCoords.add(0); xCoords.add(1); xCoords.add(1); List<Integer> yCoords = new
-         * ArrayList<Integer>(); yCoords.add(1); yCoords.add(0); yCoords.add(0);
-         * yCoords.add(1); List<Double> headDegree = calculateHeadings(xCoords,
-         * yCoords);
-         * 
-         * System.out.println(headDegree);
-         */
-        // System.out.println(0.0 <= 0);
-        // System.out.println(calculateHeadingToPoint(270, 1, 0, 1, 1));
-        // System.out.println(calculateHeadingToPoint(270, 1, 0, 1, 1));
     }
 
 }
