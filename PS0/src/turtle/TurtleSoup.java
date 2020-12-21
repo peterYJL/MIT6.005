@@ -148,6 +148,7 @@ public class TurtleSoup {
      * @param turtle the turtle context
      */
     public static void drawPersonalArt(Turtle turtle) {
+        // TODO
         throw new RuntimeException("implement me!");
     }
 
