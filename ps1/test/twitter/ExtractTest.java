@@ -21,9 +21,13 @@ public class ExtractTest {
     
     private static final Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+    private static final Instant d3 = Instant.parse("2016-02-17T14:00:00Z");
     
     private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk about rivest so much?", d1);
     private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest talk in 30 minutes #hype", d2);
+    private static final Tweet tweet3 = new Tweet(3, "sam", "Giao wuli GiaoGiao", d1);
+    private static final Tweet tweet4 = new Tweet(4, "mike", "Yo Yo check it", d1);
+    private static final Tweet tweet5 = new Tweet(5, "peter", "peter parker", d3);
     
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -31,11 +35,51 @@ public class ExtractTest {
     }
     
     @Test
-    public void testGetTimespanTwoTweets() {
+    public void testGetTimespanUnsortedOneTweetsOneTimestamp() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1));
+        
+        assertEquals("expect start", d1, timespan.getStart());
+        assertEquals("expect end", d1, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanUnsortedTwoTweetsOneTimestamp() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet3));
+        
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d1, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanUnsortedTwoTweetsTwoTimestamp() {
         Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2));
         
         assertEquals("expected start", d1, timespan.getStart());
         assertEquals("expected end", d2, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanUnsortedMultipleTweetsOneTimestamp() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet3, tweet4));
+        
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d1, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanUnsortedMultipleTweetsTwoTimestamp() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2, tweet3));
+        
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d2, timespan.getEnd());
+    }
+    
+    @Test
+    public void testGetTimespanUnsortedMultipleTweetsMultipleTimestamp() {
+        Timespan timespan = Extract.getTimespan(Arrays.asList(tweet1, tweet2, tweet5));
+        
+        assertEquals("expected start", d1, timespan.getStart());
+        assertEquals("expected end", d3, timespan.getEnd());
     }
     
     @Test
@@ -44,7 +88,9 @@ public class ExtractTest {
         
         assertTrue("expected empty set", mentionedUsers.isEmpty());
     }
-
+    
+    
+    
     /*
      * Warning: all the tests you write here must be runnable against any
      * Extract class that follows the spec. It will be run against several staff

@@ -3,6 +3,7 @@
  */
 package twitter;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +25,20 @@ public class Extract {
      *         every tweet in the list.
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        assert tweets.size() > 0 : "The size of the tweet list should larger than 0";
+        Instant startTimestamp = tweets.get(0).getTimestamp();
+        Instant endTimestamp = tweets.get(0).getTimestamp();
+        for (int i = 1; i < tweets.size(); i++) {
+            Instant currentTimestamp = tweets.get(i).getTimestamp();
+            if (currentTimestamp.isBefore(startTimestamp)) {
+                startTimestamp = currentTimestamp;
+            }
+            if (currentTimestamp.isAfter(endTimestamp)) {
+                endTimestamp = currentTimestamp;
+            }
+        }
+        Timespan miniInterval = new Timespan(startTimestamp, endTimestamp);
+        return miniInterval;
     }
 
     /**
