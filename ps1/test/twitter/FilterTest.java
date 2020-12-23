@@ -49,7 +49,7 @@ public class FilterTest {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1), "alyssa");
         
         assertEquals("expected list size", 1, writtenBy.size());
-        assertTrue("expected first", tweet1.equals(writtenBy.get(0)));
+        assertEquals("expected same order", 0, writtenBy.indexOf(tweet1));
     }
     
     // Multiple tweet and zero result
@@ -66,7 +66,7 @@ public class FilterTest {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2, tweet3), "alyssa");
         
         assertEquals("expected list size", 1, writtenBy.size());
-        assertTrue("expected first", tweet1.equals(writtenBy.get(0)));
+        assertEquals("expected same order", 0, writtenBy.indexOf(tweet1));
     }
     
     // Multiple tweet and Multiple result
@@ -75,9 +75,9 @@ public class FilterTest {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2, tweet3, tweet4, tweet5), "alyssa");
         
         assertEquals("expected list size", 3, writtenBy.size());
-        assertTrue("expected first", tweet1.equals(writtenBy.get(0)));
-        assertTrue("expected second", tweet4.equals(writtenBy.get(1)));
-        assertTrue("expected third", tweet5.equals(writtenBy.get(2)));
+        assertEquals("expected same order", 0, writtenBy.indexOf(tweet1));
+        assertEquals("expected same order", 1, writtenBy.indexOf(tweet4));
+        assertEquals("expected same order", 2, writtenBy.indexOf(tweet5));
     }
     
     // Upper case test
@@ -86,7 +86,7 @@ public class FilterTest {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2, tweet3), "ALYSSA");
 
         assertEquals("expected list size", 1, writtenBy.size());
-        assertTrue("expected first", tweet1.equals(writtenBy.get(0)));
+        assertEquals("expected same order", 0, writtenBy.indexOf(tweet1));
     }
     
     // Lower case test
@@ -95,8 +95,9 @@ public class FilterTest {
         List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet2, tweet3, tweet5), "alyssa");
         
         assertEquals("expected list size", 1, writtenBy.size());
-        assertTrue("expected first", tweet5.equals(writtenBy.get(0)));
+        assertEquals("expected same order", 0, writtenBy.indexOf(tweet5));
     }
+    
     
      
     
