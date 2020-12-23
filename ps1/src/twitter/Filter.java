@@ -4,6 +4,10 @@
 package twitter;
 
 import java.util.List;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -27,7 +31,16 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        assert tweets.size() > 0;
+        List<Tweet> writtenBy = new ArrayList<>();
+        
+        for (Tweet tweet : tweets) {
+            if (tweet.getAuthor().equals(username.toLowerCase())) {
+                writtenBy.add(tweet);
+            }
+        }
+        return writtenBy;
+        // throw new RuntimeException("not implemented");
     }
 
     /**
@@ -41,7 +54,18 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        assert tweets.size() > 0;
+        List<Tweet> inTimespan = new ArrayList<>();
+        
+        for (Tweet tweet : tweets) {
+            if (tweet.getTimestamp().isBefore(timespan.getStart()) || tweet.getTimestamp().isAfter(timespan.getEnd())) {
+                continue;
+            }
+            inTimespan.add(tweet);
+        }
+        return inTimespan;
+        
+        // throw new RuntimeException("not implemented");
     }
 
     /**
@@ -60,7 +84,20 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        assert tweets.size() > 0;
+        assert words.size() > 0;
+        List<Tweet> containing = new ArrayList<>();
+        
+        for (Tweet tweet : tweets) {
+            for (String word : words) {
+                if (tweet.getText().contains(word)) {
+                    containing.add(tweet);
+                    break;
+                }
+            }
+        }
+        return containing;
+        // throw new RuntimeException("not implemented");
     }
 
 }
