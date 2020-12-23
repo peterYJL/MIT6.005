@@ -90,7 +90,7 @@ public class Filter {
         
         for (Tweet tweet : tweets) {
             for (String word : words) {
-                if (tweet.getText().contains(word)) {
+                if (tweet.getText().toLowerCase().contains(word.toLowerCase())) {
                     containing.add(tweet);
                     break;
                 }

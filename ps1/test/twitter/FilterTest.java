@@ -206,10 +206,10 @@ public class FilterTest {
         assertTrue("expected empty list", containing.isEmpty());
     }
     
-    // Multiple tweets one word one result
+    // Multiple tweets one word one result w/ Capital word
     @Test
     public void testContainingMultipleTweetsOneWordsOneResults() {
-        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet3, tweet4), Arrays.asList("talk"));
+        List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet3, tweet4), Arrays.asList("TALK"));
         
         assertFalse("expected non-empty list", containing.isEmpty());
         assertTrue("expect list to contain tweets", containing.containsAll(Arrays.asList(tweet1)));
@@ -241,9 +241,6 @@ public class FilterTest {
     @Test
     public void testContainingMultipleTweetsMultipleWordsMultipleResults() {
         List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet3, tweet4), Arrays.asList("Giao", "talk", "much"));
-        for (Tweet tweet : containing) {
-            System.out.println(tweet);
-        }
         
         assertFalse("expected non-empty list", containing.isEmpty());
         assertTrue("expect list to contain tweets", containing.containsAll(Arrays.asList(tweet3, tweet4)));
