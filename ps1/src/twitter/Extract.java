@@ -6,6 +6,8 @@ package twitter;
 import java.time.Instant;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Extract consists of methods that extract information from a list of tweets.
@@ -55,9 +57,19 @@ public class Extract {
      *         contain a mention of the username mit.
      *         Twitter usernames are case-insensitive, and the returned set may
      *         include a username at most once.
+     *         
      */
     public static Set<String> getMentionedUsers(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Set<String> mentionedUsers = new HashSet<>();
+        
+        for (Tweet tweet : tweets) {
+            String [] sepWords = tweet.getText().split("[^@A-Za-z0-9-_]");
+            for (String word : sepWords) {
+                if (word.matches("(@)[A-Za-z0-9-_]+")) {
+                    mentionedUsers.add(word.substring(1).toLowerCase());
+                }
+            }
+        }
+        return mentionedUsers;
     }
-
 }
