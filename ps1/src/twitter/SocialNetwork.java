@@ -92,6 +92,6 @@ public class SocialNetwork {
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         
-        return influencers;
+        return Collections.unmodifiableList(influencers);
     }
 }
