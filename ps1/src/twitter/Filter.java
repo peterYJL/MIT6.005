@@ -31,15 +31,14 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        assert tweets.size() > 0;
         List<Tweet> writtenBy = new ArrayList<>();
         
         for (Tweet tweet : tweets) {
-            if (tweet.getAuthor().equals(username.toLowerCase())) {
+            if (tweet.getAuthor().toLowerCase().equals(username.toLowerCase())) {
                 writtenBy.add(tweet);
             }
         }
-        return writtenBy;
+        return Collections.unmodifiableList(writtenBy);
         // throw new RuntimeException("not implemented");
     }
 
@@ -54,7 +53,6 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        assert tweets.size() > 0;
         List<Tweet> inTimespan = new ArrayList<>();
         
         for (Tweet tweet : tweets) {
@@ -63,7 +61,7 @@ public class Filter {
             }
             inTimespan.add(tweet);
         }
-        return inTimespan;
+        return Collections.unmodifiableList(inTimespan);
         
         // throw new RuntimeException("not implemented");
     }
@@ -84,7 +82,6 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        assert tweets.size() > 0;
         assert words.size() > 0;
         List<Tweet> containing = new ArrayList<>();
         
@@ -96,7 +93,7 @@ public class Filter {
                 }
             }
         }
-        return containing;
+        return Collections.unmodifiableList(containing);
         // throw new RuntimeException("not implemented");
     }
 

@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -27,7 +28,6 @@ public class Extract {
      *         every tweet in the list.
      */
     public static Timespan getTimespan(List<Tweet> tweets) {
-        assert tweets.size() > 0 : "The size of the tweet list should larger than 0";
         Instant startTimestamp = tweets.get(0).getTimestamp();
         Instant endTimestamp = tweets.get(0).getTimestamp();
         for (int i = 1; i < tweets.size(); i++) {
@@ -70,6 +70,6 @@ public class Extract {
                 }
             }
         }
-        return mentionedUsers;
+        return Collections.unmodifiableSet(mentionedUsers);
     }
 }

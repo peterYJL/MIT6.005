@@ -3,9 +3,16 @@
  */
 package twitter;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * SocialNetwork provides methods that operate on a social network.
@@ -41,7 +48,21 @@ public class SocialNetwork {
      *         either authors or @-mentions in the list of tweets.
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
-        throw new RuntimeException("not implemented");
+        Map<String, Set<String>> followsGraph = new HashMap<>();
+        
+        Set<String> usernames = new HashSet<>();
+        for (Tweet tweet : tweets) {
+            usernames.add(tweet.getAuthor().toLowerCase());
+        }
+
+        for (String username : usernames) {
+            List<Tweet> userTweets = Filter.writtenBy(tweets, username);
+            Set<String> follows = Extract.getMentionedUsers(userTweets);
+            follows = follows.stream().filter(follow -> !follow.equalsIgnoreCase(username)).collect(Collectors.toSet());
+            followsGraph.put(username, follows);
+        }
+        return Collections.unmodifiableMap(followsGraph);
+        // throw new RuntimeException("not implemented");
     }
 
     /**
@@ -55,6 +76,28 @@ public class SocialNetwork {
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
         throw new RuntimeException("not implemented");
+    }
+    
+    public static void main(String [] args) {
+        Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
+        Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
+        
+        Tweet tweet1 = new Tweet(1, "peter", "@mark @peter", d1);
+        Tweet tweet2 = new Tweet(2, "mark", "Giao Giao", d2);
+        Tweet tweet3 = new Tweet(3, "peter", "@JJ @mike", d2);
+        Tweet tweet4 = new Tweet(4, "JJ", "@mike @mike", d2);
+        Tweet tweet5 = new Tweet(5, "JJ", "@sam", d2);
+        Tweet tweet6 = new Tweet(6, "stussy", "@MIKE @NING", d2);
+        Tweet tweet7 = new Tweet(7, "peter", "@mike @mark", d2);
+        Tweet tweet8 = new Tweet(8, "mark", "@jake", d2);
+        Tweet tweet9 = new Tweet(9, "peter", "jacky", d2);
+        
+        Map<String, Set<String>> followsGraph = guessFollowsGraph(Arrays.asList(
+                tweet1, tweet2, tweet3, tweet4, tweet5, tweet6, tweet7, tweet8));
+        //Map<String, Set<String>> followsGraph = guessFollowsGraph(Arrays.asList(tweet1));
+        for (String key : followsGraph.keySet()) {
+            System.out.println(key + ": " + followsGraph.get(key));
+        }
     }
 
 }
