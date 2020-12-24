@@ -177,6 +177,94 @@ public class SocialNetworkTest {
         assertFalse("expected Map[stussy] not include self", followsGraph.get("stussy").contains("stussy"));
     }
     
+ 
+    private static final Set<String> stussy = new HashSet<>(Arrays.asList("peter", "mike", "Jake"));
+    private static final Set<String> james = new HashSet<>();
+    private static final Set<String> mike = new HashSet<>(Arrays.asList("peter", "james", "anderson"));
+    private static final Set<String> jake = new HashSet<>(Arrays.asList("peter", "james", "mike"));
+    private static final Set<String> peter = new HashSet<>(Arrays.asList("stussy"));
+    
+    // Empty Case 
+    @Test
+    public void testInfluencersEmpty() {
+        Map<String, Set<String>> followsGraph = new HashMap<>();
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        
+        assertTrue("expected empty list", influencers.isEmpty());
+    }
+    
+    // one user multiple followers
+    @Test
+    public void testInfluencersOneUserMultipleFollowers() {
+        Map<String, Set<String>> followsGraph = new HashMap<>();
+        followsGraph.put("stussy", stussy);
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        List<String> influencersLower = new ArrayList<>();
+        
+        for (int i = 0; i < influencers.size(); i++) {
+            influencersLower.add(influencers.get(i).toLowerCase());
+        }
+
+        assertFalse("expected non-empty list", influencersLower.isEmpty());
+        assertTrue("expect first", influencersLower.subList(0, 3).containsAll(Arrays.asList("peter", "mike", "jake")));
+    }
+    
+    // two user only one of them has followers
+    @Test
+    public void testInfluencerstwoUserOneHasFollowers() {
+        Map<String, Set<String>> followsGraph = new HashMap<>();
+        followsGraph.put("stussy", stussy);
+        followsGraph.put("james", james);
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        List<String> influencersLower = new ArrayList<>();
+        
+        for (int i = 0; i < influencers.size(); i++) {
+            influencersLower.add(influencers.get(i).toLowerCase());
+        }
+        
+        assertFalse("expected non-empty list", influencersLower.isEmpty());
+        assertTrue("expect first", influencersLower.subList(0, 3).containsAll(Arrays.asList("peter", "mike", "jake")));
+    }
+    
+    // two user only both has some same followers
+    @Test
+    public void testInfluencerstwoUserSomeSameFollowers() {
+        Map<String, Set<String>> followsGraph = new HashMap<>();
+        followsGraph.put("stussy", stussy);
+        followsGraph.put("jake", jake);
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        List<String> influencersLower = new ArrayList<>();
+        
+        for (int i = 0; i < influencers.size(); i++) {
+            influencersLower.add(influencers.get(i).toLowerCase());
+        }
+        
+        assertFalse("expected non-empty list", influencersLower.isEmpty());
+        assertTrue("expect first", influencersLower.subList(0, 2).containsAll(Arrays.asList("peter", "mike")));
+        assertTrue("expect second", influencersLower.subList(2, 4).containsAll(Arrays.asList("james", "jake")));
+    }
+    
+    // Mixed case
+    @Test
+    public void testInfluencersMixedCase() {
+        Map<String, Set<String>> followsGraph = new HashMap<>();
+        followsGraph.put("stussy", stussy);
+        followsGraph.put("james", james);
+        followsGraph.put("mike", mike);
+        followsGraph.put("jake", jake);
+        followsGraph.put("peter", peter);
+        List<String> influencers = SocialNetwork.influencers(followsGraph);
+        List<String> influencersLower = new ArrayList<>();
+        
+        for (int i = 0; i < influencers.size(); i++) {
+            influencersLower.add(influencers.get(i).toLowerCase());
+        }
+        
+        assertFalse("expected non-empty list", influencersLower.isEmpty());
+        assertTrue("expect first", influencersLower.subList(0, 1).containsAll(Arrays.asList("peter")));
+        assertTrue("expect second", influencersLower.subList(1, 3).containsAll(Arrays.asList("james", "mike")));
+        assertTrue("expect third", influencersLower.subList(3, 6).containsAll(Arrays.asList("jake", "anderson", "stussy")));
+    }
     
     /*
     @Test

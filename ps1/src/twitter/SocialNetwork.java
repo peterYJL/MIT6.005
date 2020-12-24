@@ -9,8 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -72,32 +75,23 @@ public class SocialNetwork {
      * @param followsGraph
      *            a social network (as defined above)
      * @return a list of all distinct Twitter usernames in followsGraph, in
-     *         descending order of follower count.
+     *         descending order of follower count. List<String>
      */
     public static List<String> influencers(Map<String, Set<String>> followsGraph) {
-        throw new RuntimeException("not implemented");
-    }
-    
-    public static void main(String [] args) {
-        Instant d1 = Instant.parse("2016-02-17T10:00:00Z");
-        Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
-        
-        Tweet tweet1 = new Tweet(1, "peter", "@mark @peter", d1);
-        Tweet tweet2 = new Tweet(2, "mark", "Giao Giao", d2);
-        Tweet tweet3 = new Tweet(3, "peter", "@JJ @mike", d2);
-        Tweet tweet4 = new Tweet(4, "JJ", "@mike @mike", d2);
-        Tweet tweet5 = new Tweet(5, "JJ", "@sam", d2);
-        Tweet tweet6 = new Tweet(6, "stussy", "@MIKE @NING", d2);
-        Tweet tweet7 = new Tweet(7, "peter", "@mike @mark", d2);
-        Tweet tweet8 = new Tweet(8, "mark", "@jake", d2);
-        Tweet tweet9 = new Tweet(9, "peter", "jacky", d2);
-        
-        Map<String, Set<String>> followsGraph = guessFollowsGraph(Arrays.asList(
-                tweet1, tweet2, tweet3, tweet4, tweet5, tweet6, tweet7, tweet8));
-        //Map<String, Set<String>> followsGraph = guessFollowsGraph(Arrays.asList(tweet1));
+        Map<String, Integer> numOfFollowers = new HashMap<>();
         for (String key : followsGraph.keySet()) {
-            System.out.println(key + ": " + followsGraph.get(key));
+            for (String name : followsGraph.get(key)) {
+                if (numOfFollowers.containsKey(name)) {
+                    numOfFollowers.put(name, numOfFollowers.get(name) + 1);
+                } else {
+                    numOfFollowers.put(name, 1);
+                }
+            }
         }
+        List<String> influencers = numOfFollowers.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        
+        return influencers;
     }
-
 }
