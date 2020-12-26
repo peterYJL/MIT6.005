@@ -30,17 +30,16 @@ public class Extract {
     public static Timespan getTimespan(List<Tweet> tweets) {
         Instant startTimestamp = tweets.get(0).getTimestamp();
         Instant endTimestamp = tweets.get(0).getTimestamp();
-        for (int i = 1; i < tweets.size(); i++) {
-            Instant currentTimestamp = tweets.get(i).getTimestamp();
-            if (currentTimestamp.isBefore(startTimestamp)) {
-                startTimestamp = currentTimestamp;
+        for (Tweet tweet : tweets) {
+            if (tweet.getTimestamp().isBefore(startTimestamp)) {
+                startTimestamp = tweet.getTimestamp();
             }
-            if (currentTimestamp.isAfter(endTimestamp)) {
-                endTimestamp = currentTimestamp;
+            if (tweet.getTimestamp().isAfter(endTimestamp)) {
+                endTimestamp = tweet.getTimestamp();
             }
         }
-        Timespan miniInterval = new Timespan(startTimestamp, endTimestamp);
-        return miniInterval;
+        Timespan minimumInterval = new Timespan(startTimestamp, endTimestamp);
+        return minimumInterval;
     }
 
     /**
@@ -63,9 +62,9 @@ public class Extract {
         Set<String> mentionedUsers = new HashSet<>();
         
         for (Tweet tweet : tweets) {
-            String [] sepWords = tweet.getText().split("[^@A-Za-z0-9-_]");
+            String [] sepWords = tweet.getText().split("[^\\w@-]+");
             for (String word : sepWords) {
-                if (word.matches("(@)[A-Za-z0-9-_]+")) {
+                if (word.matches("(@)[\\w-]+")) {
                     mentionedUsers.add(word.substring(1).toLowerCase());
                 }
             }

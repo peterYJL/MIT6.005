@@ -55,8 +55,11 @@ public class SocialNetworkTest {
     @Test
     public void testGuessFollowsGraphOneUserOneTweetZeroAt() {
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(Arrays.asList(tweet2));
+        Map<String, Set<String>> followsGraphLowerCase = followsGraph.keySet().stream()
+                .collect(Collectors.toMap(key -> key.toLowerCase(),
+                        key -> followsGraph.get(key).stream().map(String::toLowerCase).collect(Collectors.toSet())));
 
-        assertTrue("expected empty graph", followsGraph.isEmpty() || followsGraph.get(tweet2.getAuthor()).isEmpty());
+        assertTrue("expected empty graph", followsGraphLowerCase.isEmpty() || followsGraphLowerCase.get(tweet2.getAuthor()).isEmpty());
     }
     
     // 2. One user one tweet and one @
