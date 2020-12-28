@@ -5,8 +5,8 @@ package graph;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
-
 import org.junit.Test;
 
 /**
@@ -27,6 +27,7 @@ public class GraphStaticTest {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
     
+    // 
     @Test
     public void testEmptyVerticesEmpty() {
         assertEquals("expected empty() graph to have no vertices",
