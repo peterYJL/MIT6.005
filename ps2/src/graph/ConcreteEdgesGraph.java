@@ -20,18 +20,33 @@ public class ConcreteEdgesGraph implements Graph<String> {
     private final List<Edge> edges = new ArrayList<>();
     
     // Abstraction function:
-    //   TODO
+    //   represents a weighted directed graph with distinct vertices
+    //   and positive weight edges.
     // Representation invariant:
-    //   TODO
+    //   for each edge in edges, there are definitely two vertices in vertices set
     // Safety from rep exposure:
-    //   TODO
+    //   All fields are private and final; 
     
-    // TODO constructor
+    /**
+     * Make a empty graph
+     */
+    public ConcreteEdgesGraph() {
+        checkRep();
+    }
     
-    // TODO checkRep
+    /**
+     * Used to check whether the rep invariant valid.
+     */
+    private void checkRep() {
+        for (Edge edge : edges) {
+            assert vertices.contains(edge.getSource());
+            assert vertices.contains(edge.getTarget());
+        }
+    }
     
     @Override public boolean add(String vertex) {
-        throw new RuntimeException("not implemented");
+        return vertices.add(vertex);
+        // throw new RuntimeException("not implemented");
     }
     
     @Override public int set(String source, String target, int weight) {
@@ -55,34 +70,84 @@ public class ConcreteEdgesGraph implements Graph<String> {
     }
     
     // TODO toString()
+    @Override public String toString() {
+        throw new RuntimeException("not implemented");
+    }
     
 }
 
 /**
- * TODO specification
  * Immutable.
  * This class is internal to the rep of ConcreteEdgesGraph.
+ * 
+ * This immutable data type represents an edge in a weight directed graph.
+ * It contains source, target vertices and weight as representation.
  * 
  * <p>PS2 instructions: the specification and implementation of this class is
  * up to you.
  */
 class Edge {
     
-    // TODO fields
+    private final String source;
+    private final String target;
+    private final int weight;
+    
     
     // Abstraction function:
-    //   TODO
+    //   represents the source and target vertices of an edge with its
+    //   corresponding weight.
     // Representation invariant:
-    //   TODO
+    //   weight should be positive
+    //   source and target cannot be the same.
     // Safety from rep exposure:
-    //   TODO
+    //   All fields are private and final;
+    //   source and target are Strings, so are guaranteed immutable;
+    //   make defensive copies to avoid
     
-    // TODO constructor
+    /**
+     * Make a edge.
+     * @param source the vertex directed from
+     * @param target the vertex directed to
+     * @param weight the weight of the edge
+     */
+    public Edge(String source, String target, int weight) {
+        this.source = source;
+        this.target = target;
+        this.weight = weight;
+        checkRep();
+    }
     
-    // TODO checkRep
+    /**
+     * Used to check whether rep invariant is valid.
+     */
+    private void checkRep() {
+        assert !source.equals(target);
+        assert weight > 0;    
+    }
     
-    // TODO methods
+    /**
+     * @return the label of the vertex
+     */
+    public String getSource(){
+        return source;
+    }
     
-    // TODO toString()
+    /**
+     * @return the label of the target vertex
+     */
+    public String getTarget(){
+        return target;
+    }
     
+    /**
+     * @return the weight of this edge
+     */
+    public int getWeight(){
+        return weight;
+    }
+    
+    @Override
+    public String toString() {
+        return "The edge weight is " + weight + "from source " + source + " to " + target;
+    }
 }

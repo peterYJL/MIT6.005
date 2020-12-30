@@ -32,7 +32,10 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     //   TODO
     
     // TODO tests for ConcreteEdgesGraph.toString()
-    
+    @test
+    public void testConcreteEdgesGraphToString() {
+        
+    }
     /*
      * Testing Edge...
      */
@@ -41,5 +44,8 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     //   TODO
     
     // TODO tests for operations of Edge
-    
+    @test
+    public void testEdgeToString() {
+        
+    }
 }

@@ -4,6 +4,7 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,15 +19,54 @@ public class ConcreteVerticesGraph implements Graph<String> {
     private final List<Vertex> vertices = new ArrayList<>();
     
     // Abstraction function:
-    //   TODO
+    //   represents a weighted directed graph with distinct vertices
+    //   and positive weight edges. 
     // Representation invariant:
-    //   TODO
+    //   No repeat! each vertices should have different labels.
+    //   vertices is a list of vertices that contains in this graph.
+    //   for any two vertices A and B, if A is a source of B, then
+    //   B is a target of A
     // Safety from rep exposure:
-    //   TODO
+    //   All fields are private and final.
+    //   make defensive copies to avoid sharing the rep's vertices object with clients.
     
     // TODO constructor
+    public ConcreteVerticesGraph() {
+        checkRep();
+    }
     
     // TODO checkRep
+    public void checkRep() {
+        Set<Vertex> 
+        for (Vertex ver : vertices) {
+            
+        }
+        
+        for (Vertex ver : vertices) {
+            Map<String, Integer> tempSources = ver.getSources();
+            Map<String, Integer> tempTargets = ver.getTargets();
+            
+            for (String vertexLabel : tempSources.keySet()) {
+                for (Vertex vert : vertices) {
+                    if (vert.getLabel().equals(vertexLabel)) {
+                        assert vert.getTargets().containsKey(vertexLabel);
+                        assert vert.getTargets().get(vertexLabel).equals(tempSources.get(vert.getLabel()));
+                        break;
+                    }
+                }
+            }
+            
+            for (String vertexLabel : tempTargets.keySet()) {
+                for (Vertex vert : vertices) {
+                    if (vert.getLabel().equals(vertexLabel)) {
+                        assert vert.getSources().containsKey(vertexLabel);
+                        assert vert.getSources().get(vertexLabel).equals(tempTargets.get(vert.getLabel()));
+                        break;
+                    }
+                }
+            }
+        }
+    }
     
     @Override public boolean add(String vertex) {
         throw new RuntimeException("not implemented");
@@ -67,20 +107,94 @@ public class ConcreteVerticesGraph implements Graph<String> {
 class Vertex {
     
     // TODO fields
+    private final String label;
+    private final Map<String, Integer> sources;
+    private final Map<String, Integer> targets;
     
     // Abstraction function:
-    //   TODO
+    //   represents a vertex with name label, and the vertices 
+    //   direct to targets and directed by sources.
     // Representation invariant:
-    //   TODO
+    //   the weights between sources and targets should be positive
     // Safety from rep exposure:
-    //   TODO
+    //   All fields are private and final.
     
     // TODO constructor
+    public Vertex(String label) {
+        this.label = label;
+        this.sources = new HashMap<>();
+        this.targets = new HashMap<>();
+        
+    }
     
     // TODO checkRep
+    private void checkRep() {
+        assert label != null;
+        for (Integer weight : sources.values()) {
+            assert weight > 0;
+        }
+        
+        for (Integer weight : targets.values()) {
+            assert weight > 0;
+        }
+    }
     
     // TODO methods
+    public String getLabel() {
+        return this.label;
+    }
     
+    public Map<String, Integer> getSources() {
+        return new HashMap<>(this.sources);
+    }
+    
+    public Map<String, Integer> getTargets() {
+        return new HashMap<>(this.targets);
+    }
+    
+    /**
+     * Get the source vertices with directed edges to a target vertex and the
+     * weights of those edges.
+     * 
+     * @param target a label
+     * @return a map where the key set is the set of labels of vertices such
+     *         that this graph includes an edge from that vertex to target, and
+     *         the value for each key is the (nonzero) weight of the edge from
+     *         the key to target
+     */
+    public Integer setSources(Vertex vertex, int weight) {
+        if (sources.containsKey(vertex.getLabel())) {
+            int old = this.sources.put(vertex.getLabel(), weight);
+            vertex.setTargets(this, weight);
+            checkRep();
+            return old;
+        } else {
+            this.sources.put(vertex.getLabel(), weight);
+            vertex.setTargets(this, weight);
+            checkRep();
+            return 0;
+        }
+    }  
+    
+    public Integer setTargets(Vertex vertex, int weight) {
+        if (targets.containsKey(vertex.getLabel())) {
+            int old = this.targets.put(vertex.getLabel(), weight);
+            vertex.setSources(this, weight);
+            checkRep();
+            return old;
+        } else {
+            this.targets.put(vertex.getLabel(), weight);
+            vertex.setSources(this, weight);
+            checkRep();
+            return 0;
+        }
+    }  
+    
+    
+
     // TODO toString()
-    
+    @Override
+    public String toString() {
+        throw new RuntimeException("not implemented");
+    }
 }
