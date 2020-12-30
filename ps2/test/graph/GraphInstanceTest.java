@@ -5,6 +5,7 @@ package graph;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.junit.Test;
@@ -42,6 +43,11 @@ public abstract class GraphInstanceTest {
     //      graph = 0, N
     //      L source = exists, not exists
     //      L target = 0, N
+    // ConcreteEdgesGraph.toString() and 
+    // toString():
+    //      edges = 0, n
+    //      vertices = 0, 1, n
+    
     private static final String ver1 = "ver1";
     private static final String ver2 = "ver2";
     private static final String ver3 = "ver3";
@@ -338,4 +344,40 @@ public abstract class GraphInstanceTest {
         assertTrue("expected contains ver3", instance.targets(ver1).containsKey(ver3));
     }
     
+    
+    
+    
+    
+    
+    @Test
+    public void testEmptyGraphToString() {
+        Graph<String> graph = emptyInstance();
+        assertEquals("expected string representation", "vertices:\nedges:\n", graph.toString());
+    }
+
+    @Test
+    public void testSingleVertexToString() {
+        Graph<String> graph = emptyInstance();
+        graph.add("A");
+        assertEquals("expected string representation", "vertices:\nA\nedges:\n");
+    }
+
+    @Test
+    public void testMultipleVerticesEdgesToString() {
+        Graph<String> graph = emptyInstance();
+        graph.set("A", "B", 5);
+        graph.set("A", "C", 3);
+        graph.set("D", "A", 4);
+        String stringRep = graph.toString();
+        String[] lines = stringRep.split("\n");
+        String[] labels = lines[1].split("\\s");
+
+        assertEquals("expected number of lines", 6, lines.length);
+        assertEquals("expected first line", "vertices:", lines[0]);
+        assertEquals("expected third line", "edges:", lines[2]);
+        assertEquals("expeted number of labels", 4, labels.length);
+        assertTrue("expeted labels", Arrays.asList(labels).containsAll(Arrays.asList("A", "B", "C", "D")));
+        assertTrue("expeted lines",
+                Arrays.asList(lines).containsAll(Arrays.asList("A --- 5 ---> B", "A --- 3 ---> C", "D --- 4---> A")));
+    }  
 }

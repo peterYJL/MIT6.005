@@ -17,6 +17,13 @@ import org.junit.Test;
  */
 public class ConcreteEdgesGraphTest extends GraphInstanceTest {
     
+    private static final String ver1 = "ning";
+    private static final String ver2 = "Jack";
+    private static final String ver3 = "mike";
+    
+    private static final int weight1 = 4;
+    private static final int weight2 = 5;
+    
     /*
      * Provide a ConcreteEdgesGraph for tests in GraphInstanceTest.
      */
@@ -29,23 +36,57 @@ public class ConcreteEdgesGraphTest extends GraphInstanceTest {
      */
     
     // Testing strategy for ConcreteEdgesGraph.toString()
-    //   TODO
+    // toString():
+    //      edges = 0, n
+    //      vertices = 0, 1, n
     
-    // TODO tests for ConcreteEdgesGraph.toString()
-    @test
-    public void testConcreteEdgesGraphToString() {
+    // Testing ConcreteEdgesGraph.toString()
+    // empty edges & (empty vertices | one vertices | multiple vertices)
+    @Test
+    public void testConcreteEdgesGraphToStringEmptyEdgeEmptyVertices() {
+        /*
+        Graph<String> graph = emptyInstance();
         
+        assertEquals("expected string", "Vertices:\nEdges:\n", graph.toString());
+        graph.add(ver1);
+        assertEquals("expected string", "Vertices: ning\nEdges:\n", graph.toString());
+        graph.add(ver2);
+        assertEquals("expected string", "Vertices: ning Jack\nEdges:\n", graph.toString());
     }
+
+    // multiple edges and multiple vertices
+    @Test
+    public void testConcreteEdgesGraphToStringMultipleEdgeMultipleVertices() {
+        Graph<String> graph = emptyInstance();
+        graph.set(ver1, ver2, weight1);
+        graph.set(ver1, ver3, weight2);
+        
+        assertEquals("expected string", "Vertices: ning Jack mike\nEdges:\nning --- 4 ---> Jack\nning --- 5 ---> mike\n", graph.toString());
+    }
+    */
+    
     /*
      * Testing Edge...
      */
     
     // Testing strategy for Edge
-    //   TODO
-    
-    // TODO tests for operations of Edge
-    @test
-    public void testEdgeToString() {
+    //     getSource()
+    //     getTarget()
+    //     getWeight()
+    @Test
+    public void testGetMethods() {
+        Edge edges = new Edge(ver1, ver2, weight1);
         
+        assertEquals("expected string 'Jack'", edges.getTarget(), "Jack");
+        assertEquals("expected string 'ning'", edges.getSource(), "ning");
+        assertEquals("expected string '4'", edges.getWeight(), 4);
+    }
+    
+    // Testing Edge.toString()
+    @Test
+    public void testEdgeToString() {
+        Edge edge = new Edge(ver1, ver2, weight1);
+        
+        assertEquals("expected toString", "ning --- 4 ---> Jack", edge.toString());
     }
 }

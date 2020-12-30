@@ -28,14 +28,14 @@ public class ConcreteEdgesGraph implements Graph<String> {
     //   All fields are private and final; 
     
     /**
-     * Make a empty graph
+     * Make an empty graph
      */
     public ConcreteEdgesGraph() {
         checkRep();
     }
     
     /**
-     * Used to check whether the rep invariant valid.
+     * Check that the rep invariant is true
      */
     private void checkRep() {
         for (Edge edge : edges) {
@@ -102,7 +102,6 @@ class Edge {
     // Safety from rep exposure:
     //   All fields are private and final;
     //   source and target are Strings, so are guaranteed immutable;
-    //   make defensive copies to avoid
     
     /**
      * Make a edge.
@@ -118,7 +117,7 @@ class Edge {
     }
     
     /**
-     * Used to check whether rep invariant is valid.
+     * Check that the rep invariant is true
      */
     private void checkRep() {
         assert !source.equals(target);
@@ -129,6 +128,7 @@ class Edge {
      * @return the label of the vertex
      */
     public String getSource(){
+        checkRep();
         return source;
     }
     
@@ -136,6 +136,7 @@ class Edge {
      * @return the label of the target vertex
      */
     public String getTarget(){
+        checkRep();
         return target;
     }
     
@@ -143,11 +144,13 @@ class Edge {
      * @return the weight of this edge
      */
     public int getWeight(){
+        checkRep();
         return weight;
     }
     
     @Override
     public String toString() {
-        return "The edge weight is " + weight + "from source " + source + " to " + target;
+        checkRep();
+        return this.source + " --- " + this.weight + " ---> " + this.target;
     }
 }

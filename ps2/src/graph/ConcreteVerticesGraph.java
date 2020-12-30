@@ -5,6 +5,7 @@ package graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,16 +31,20 @@ public class ConcreteVerticesGraph implements Graph<String> {
     //   All fields are private and final.
     //   make defensive copies to avoid sharing the rep's vertices object with clients.
     
-    // TODO constructor
+    /**
+     * Make an empty graph
+     */
     public ConcreteVerticesGraph() {
         checkRep();
     }
     
-    // TODO checkRep
+    /**
+     * Check that the rep invariant is true 
+     */
     public void checkRep() {
-        Set<Vertex> 
+        Set<Vertex> verticesSet = new HashSet<>();
         for (Vertex ver : vertices) {
-            
+            assert verticesSet.add(ver);  
         }
         
         for (Vertex ver : vertices) {
@@ -67,46 +72,57 @@ public class ConcreteVerticesGraph implements Graph<String> {
             }
         }
     }
-    
+
     @Override public boolean add(String vertex) {
+        checkRep();
         throw new RuntimeException("not implemented");
     }
     
     @Override public int set(String source, String target, int weight) {
+        checkRep();
         throw new RuntimeException("not implemented");
     }
     
     @Override public boolean remove(String vertex) {
+        checkRep();
         throw new RuntimeException("not implemented");
     }
     
     @Override public Set<String> vertices() {
+        checkRep();
         throw new RuntimeException("not implemented");
     }
     
     @Override public Map<String, Integer> sources(String target) {
+        checkRep();
         throw new RuntimeException("not implemented");
     }
     
     @Override public Map<String, Integer> targets(String source) {
+        checkRep();
         throw new RuntimeException("not implemented");
     }
     
-    // TODO toString()
-    
+    @Override 
+    public String toString() {
+        checkRep();
+        throw new RuntimeException("not implemented");
+    }
 }
 
 /**
- * TODO specification
  * Mutable.
  * This class is internal to the rep of ConcreteVerticesGraph.
+ * 
+ * This mutable data type represents a vertex in a weight directed graph.
+ * It contain variable label as its name, and two Map sources and targets
+ * which is all the vertex direct from and direct to. 
  * 
  * <p>PS2 instructions: the specification and implementation of this class is
  * up to you.
  */
 class Vertex {
     
-    // TODO fields
     private final String label;
     private final Map<String, Integer> sources;
     private final Map<String, Integer> targets;
@@ -118,16 +134,21 @@ class Vertex {
     //   the weights between sources and targets should be positive
     // Safety from rep exposure:
     //   All fields are private and final.
+    //   make defensive copies to avoid rep exposure.
     
-    // TODO constructor
+    /**
+     * @param label the label of the vertex
+     */
     public Vertex(String label) {
         this.label = label;
         this.sources = new HashMap<>();
         this.targets = new HashMap<>();
-        
+        checkRep();
     }
     
-    // TODO checkRep
+    /**
+     * Check that the rep invariants is true
+     */
     private void checkRep() {
         assert label != null;
         for (Integer weight : sources.values()) {
@@ -139,60 +160,88 @@ class Vertex {
         }
     }
     
-    // TODO methods
+    /**
+     * @return the label of the vertex
+     */
     public String getLabel() {
+        checkRep();
         return this.label;
     }
     
+    /**
+     * @return the label of the vertices that direct to the current vertex
+     */
     public Map<String, Integer> getSources() {
-        return new HashMap<>(this.sources);
-    }
-    
-    public Map<String, Integer> getTargets() {
-        return new HashMap<>(this.targets);
+        //return new HashMap<>(this.sources);
+        checkRep();
+        throw new RuntimeException("not implemented");
     }
     
     /**
-     * Get the source vertices with directed edges to a target vertex and the
-     * weights of those edges.
+     * @return the label of the vertices that the current vertex direct to
+     */
+    public Map<String, Integer> getTargets() {
+        //return new HashMap<>(this.targets);
+        checkRep();
+        throw new RuntimeException("not implemented");
+    }
+    
+    /**
+     * Add, change, or remove a weighted directed edge directed from this vertex.
+     * If weight is nonzero, add an edge or update the weight of that edge;
+     * If weight is zero, remove the edge if it exists (the vertex is not
+     * otherwise modified).
      * 
-     * @param target a label
+     * @param vertex the vertex we want to set with
+     * @param weight the weight of the edge
      * @return a map where the key set is the set of labels of vertices such
      *         that this graph includes an edge from that vertex to target, and
      *         the value for each key is the (nonzero) weight of the edge from
      *         the key to target
      */
-    public Integer setSources(Vertex vertex, int weight) {
-        if (sources.containsKey(vertex.getLabel())) {
-            int old = this.sources.put(vertex.getLabel(), weight);
-            vertex.setTargets(this, weight);
+    public Integer setSources(String source, int weight) {
+        /*
+        if (sources.containsKey(source)) {
+            int old = this.sources.put(source, weight);
             checkRep();
             return old;
         } else {
-            this.sources.put(vertex.getLabel(), weight);
-            vertex.setTargets(this, weight);
+            this.sources.put(source, weight);
             checkRep();
             return 0;
         }
+        checkRep();
+        */
+        throw new RuntimeException("not implemented");
     }  
     
-    public Integer setTargets(Vertex vertex, int weight) {
-        if (targets.containsKey(vertex.getLabel())) {
-            int old = this.targets.put(vertex.getLabel(), weight);
-            vertex.setSources(this, weight);
+    /**
+     * Add, change, or remove a weighted directed edge directed from this vertex.
+     * If weight is nonzero, add an edge or update the weight of that edge;
+     * If weight is zero, remove the edge if it exists (the vertex is not
+     * otherwise modified).
+     * 
+     * @param target label of the source vertex
+     * @param weight nonnegative weight of the edge
+     * @return the previous weight of the edge, or zero if there was no such
+     *         edge
+     */
+    public Integer setTargets(String target, int weight) {
+        /*
+        if (targets.containsKey(target)) {
+            int old = this.targets.put(target, weight);
             checkRep();
             return old;
         } else {
-            this.targets.put(vertex.getLabel(), weight);
-            vertex.setSources(this, weight);
+            this.targets.put(target, weight);
             checkRep();
             return 0;
         }
+        checkRep();
+        */
+        throw new RuntimeException("not implemented");
     }  
     
-    
-
-    // TODO toString()
     @Override
     public String toString() {
         throw new RuntimeException("not implemented");
