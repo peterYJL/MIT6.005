@@ -27,13 +27,23 @@ public class GraphStaticTest {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
     
-    // 
+    // Testing ConcreteEdgesGraph implementation
+    // Test empty
     @Test
     public void testEmptyVerticesEmpty() {
         assertEquals("expected empty() graph to have no vertices",
                 Collections.emptySet(), Graph.empty().vertices());
     }
     
-    // TODO test other vertex label types in Problem 3.2
-    
+    // Test Integer type
+    @Test
+    public void testTypeInteger() {
+        Graph<Integer> IntGraph = Graph.empty();
+        
+        assertEquals("expected previous weight is 0", 0, IntGraph.set(4, 5, 2));
+        assertEquals("expected current weight of label 4 and 5 is 2", 2, (int) IntGraph.sources(5).get(4));
+        assertEquals("expected previous weight is 0", 0, IntGraph.set(3, 5, 3));
+        assertEquals("expected current weight of label 3 and 5 is 3", 3, (int) IntGraph.sources(5).get(3));
+        assertEquals("expected size of vertices is 3", 3, IntGraph.vertices().size());
+    }
 }

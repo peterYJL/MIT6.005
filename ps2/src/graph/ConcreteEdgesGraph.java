@@ -4,20 +4,22 @@
 package graph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Iterator;
 
 /**
  * An implementation of Graph.
  * 
  * <p>PS2 instructions: you MUST use the provided rep.
  */
-public class ConcreteEdgesGraph implements Graph<String> {
+public class ConcreteEdgesGraph<L> implements Graph<L> {
     
-    private final Set<String> vertices = new HashSet<>();
-    private final List<Edge> edges = new ArrayList<>();
+    private final Set<L> vertices = new HashSet<>();
+    private final List<Edge<L>> edges = new ArrayList<>();
     
     // Abstraction function:
     //   represents a weighted directed graph with distinct vertices
@@ -38,42 +40,122 @@ public class ConcreteEdgesGraph implements Graph<String> {
      * Check that the rep invariant is true
      */
     private void checkRep() {
-        for (Edge edge : edges) {
+        for (Edge<L> edge : edges) {
             assert vertices.contains(edge.getSource());
             assert vertices.contains(edge.getTarget());
         }
     }
     
-    @Override public boolean add(String vertex) {
-        return vertices.add(vertex);
+    @Override public boolean add(L vertex) {
+        boolean success = vertices.add(vertex);
+        checkRep();
+        return success;
         // throw new RuntimeException("not implemented");
     }
     
-    @Override public int set(String source, String target, int weight) {
-        throw new RuntimeException("not implemented");
+    /**
+     * Add, change, or remove a weighted directed edge in this graph.
+     * If weight is nonzero, add an edge or update the weight of that edge;
+     * vertices with the given labels are added to the graph if they do not
+     * already exist.
+     * If weight is zero, remove the edge if it exists (the graph is not
+     * otherwise modified).
+     * 
+     * @param source label of the source vertex
+     * @param target label of the target vertex
+     * @param weight nonnegative weight of the edge
+     * @return the previous weight of the edge, or zero if there was no such
+     *         edge
+     */
+    @Override public int set(L source, L target, int weight) {
+        assert weight >= 0;
+        int previous = 0;
+        Iterator<Edge<L>> iter = edges.iterator();
+        while (iter.hasNext()) {
+            Edge<L> edge = iter.next();
+            if (weight == 0) {
+                if (edge.getSource().equals(source) && edge.getTarget().equals(target)) {
+                    previous = edge.getWeight();
+                    iter.remove();
+                    checkRep();
+                    return previous;
+                }
+            } else {
+                if (edge.getSource().equals(source) && edge.getTarget().equals(target)) {
+                    previous = edge.getWeight();
+                    iter.remove();
+                    edges.add(new Edge<L>(source, target, weight));
+                    checkRep();
+                    return previous;
+                } 
+            }
+        }
+        if (weight != 0) {
+            vertices.add(source);
+            vertices.add(target);
+            edges.add(new Edge<L>(source, target, weight));
+        }
+        checkRep();
+        return previous;
+        // throw new RuntimeException("not implemented");
     }
     
-    @Override public boolean remove(String vertex) {
-        throw new RuntimeException("not implemented");
+    @Override public boolean remove(L vertex) {
+        if (vertices.contains(vertex)) {
+            Iterator<Edge<L>> iter = edges.iterator();
+            while (iter.hasNext()) {
+                Edge<L> edge = iter.next();
+                if (edge.getSource().equals(vertex) || 
+                    edge.getTarget().equals(vertex))
+                    iter.remove();
+            }
+            vertices.remove(vertex);
+            checkRep();
+            return true;
+        }
+        checkRep();
+        return false;
+        // throw new RuntimeException("not implemented");
     }
     
-    @Override public Set<String> vertices() {
-        throw new RuntimeException("not implemented");
+    @Override public Set<L> vertices() {
+        checkRep();
+        return Set.copyOf(vertices);
+        // throw new RuntimeException("not implemented");
     }
     
-    @Override public Map<String, Integer> sources(String target) {
-        throw new RuntimeException("not implemented");
+    @Override public Map<L, Integer> sources(L target) {
+        Map<L, Integer> targetSources = new HashMap<>();
+        for (Edge<L> edge : edges) {
+            if (edge.getTarget().equals(target)) {
+                targetSources.put(edge.getSource(), edge.getWeight());
+            }
+        }
+        checkRep();
+        return Map.copyOf(targetSources);
+        // throw new RuntimeException("not implemented");
     }
     
-    @Override public Map<String, Integer> targets(String source) {
-        throw new RuntimeException("not implemented");
+    @Override public Map<L, Integer> targets(L source) {
+        Map<L, Integer> sourceTargets = new HashMap<>();
+        for (Edge<L> edge : edges) {
+            if (edge.getSource().equals(source)) {
+                sourceTargets.put(edge.getTarget(), edge.getWeight());
+            }
+        }
+        checkRep();
+        return Map.copyOf(sourceTargets);
+        // throw new RuntimeException("not implemented");
     }
     
-    // TODO toString()
     @Override public String toString() {
-        throw new RuntimeException("not implemented");
+        String result = "vertices:" + vertices + "\nedges:\n";
+        for (Edge<L> edge : edges) {
+            result += edge.toString();
+        }
+        return result;
+        // throw new RuntimeException("not implemented");
     }
-    
 }
 
 /**
@@ -86,10 +168,10 @@ public class ConcreteEdgesGraph implements Graph<String> {
  * <p>PS2 instructions: the specification and implementation of this class is
  * up to you.
  */
-class Edge {
+class Edge<L> {
     
-    private final String source;
-    private final String target;
+    private final L source;
+    private final L target;
     private final int weight;
     
     
@@ -109,7 +191,7 @@ class Edge {
      * @param target the vertex directed to
      * @param weight the weight of the edge
      */
-    public Edge(String source, String target, int weight) {
+    public Edge(L source, L target, int weight) {
         this.source = source;
         this.target = target;
         this.weight = weight;
@@ -120,24 +202,24 @@ class Edge {
      * Check that the rep invariant is true
      */
     private void checkRep() {
-        assert !source.equals(target);
-        assert weight > 0;    
+        assert !this.source.equals(this.target);
+        assert this.weight > 0;    
     }
     
     /**
      * @return the label of the vertex
      */
-    public String getSource(){
+    public L getSource(){
         checkRep();
-        return source;
+        return this.source;
     }
     
     /**
      * @return the label of the target vertex
      */
-    public String getTarget(){
+    public L getTarget(){
         checkRep();
-        return target;
+        return this.target;
     }
     
     /**
@@ -145,12 +227,18 @@ class Edge {
      */
     public int getWeight(){
         checkRep();
-        return weight;
+        return this.weight;
     }
     
+    /**
+     * Edge toString Override
+     * @return output source --- weight ---> target
+     */
     @Override
     public String toString() {
         checkRep();
-        return this.source + " --- " + this.weight + " ---> " + this.target;
+        return this.source + " --- " + this.weight + " ---> " + this.target + "\n";
     }
 }
+
+
